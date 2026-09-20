@@ -1,0 +1,4 @@
+interface:
+  display_name: "TLDR Recap"
+  short_description: "Turn meeting recordings into useful notes"
+  default_prompt: "Use $tldr-recap to transcribe this meeting and create concise English notes."

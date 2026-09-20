@@ -1,0 +1,18 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tldr-recap"
+version = "0.1.0"
+description = "Turn recorded meetings into transcripts and concise notes using a Colab GPU."
+readme = "README.md"
+authors = [{ name = "Itay Mendelson" }]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+recap = "tldr_recap.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tldr_recap"]
