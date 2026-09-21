@@ -10,7 +10,7 @@ Turn one or more local meeting recordings into a timestamped transcript and conc
 ## Before transcription
 
 1. If the user did not supply a recording path, ask for it and stop. Resolve every supplied path; if one does not exist, report its resolved path and stop. Multiple paths represent consecutive parts of one meeting.
-2. If the user did not choose an output location, ask whether to use the default under `./meetings/` in the directory where the agent was started or a different path. Pass a chosen path with `--output-dir`.
+2. If the user did not choose an output location, ask whether to use the default under `./meetings/` in the directory where the agent was started or a different path. Pass a chosen path with `--output-dir`; the folder must not exist yet, so ask for a different path if it does.
 3. Preserve any user instruction about what the notes should emphasize.
 4. Read [setup](references/setup.md) only when `recap` is unavailable, Colab authentication fails, or speaker diarization reports an access-token error.
 
@@ -22,7 +22,7 @@ Run:
 recap <recording-path> [additional-parts...] [--output-dir <path>]
 ```
 
-The defaults are Whisper `large-v3`, automatic language detection, a T4 GPU, and speaker diarization. Use `--language <code>` with a Whisper language code such as `en` or `he` only when the user requests it or automatic detection is wrong. Use `--no-diarization` only when the user asks to skip speaker labels or cannot provide the required model access. The command downloads an unlabeled transcript checkpoint before starting diarization.
+The defaults are Whisper `large-v3`, automatic language detection, a T4 GPU, and speaker diarization. Use `--language <code>` with a Whisper language code such as `en` or `fr` only when the user requests it or automatic detection is wrong. Use `--no-diarization` only when the user asks to skip speaker labels or cannot provide the required model access. Use `--num-speakers <n>` when the user says how many people spoke, and `--model` or `--gpu` only when the user asks for a different Whisper model or GPU type. The command downloads an unlabeled transcript checkpoint before starting diarization.
 
 If the command fails, surface the actual error and point to `transcription.log` when it exists. If `transcript.md` and `transcript.json` also exist, transcription succeeded but a later stage failed. Offer to create notes without speaker labels or retry only diarization with:
 

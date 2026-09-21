@@ -1,11 +1,11 @@
 # Retrieval under temporal domain shift
 
 - **Project:** Thesis on retrieval-augmented question answering over cybersecurity advisories
-- **Participants:** Dr. Maya Cohen (advisor), Daniel Levi (student)
+- **Participants:** Dr. Alice Turner (advisor), James Miller (student)
 
 ## Summary
 
-Dr. Maya Cohen and Daniel Levi reviewed an experiment comparing lexical, dense, and hybrid retrieval over cybersecurity advisories. They identified leakage in the current chunk-level dataset split and agreed to rebuild the evaluation around a strict temporal boundary before drawing conclusions from the reported retrieval gains.
+Dr. Alice Turner and James Miller reviewed an experiment comparing lexical, dense, and hybrid retrieval over cybersecurity advisories. They identified leakage in the current chunk-level dataset split and agreed to rebuild the evaluation around a strict temporal boundary before drawing conclusions from the reported retrieval gains.
 
 ## Decisions
 
@@ -24,7 +24,7 @@ Dr. Maya Cohen and Daniel Levi reviewed an experiment comparing lexical, dense, 
 
 ## Action items
 
-- **Daniel**
+- **James**
   - Rebuild the dataset using advisory-level grouping and a strict 2024/2025 temporal boundary.
   - Produce an auditable manifest of excluded overlapping questions.
   - Rerun BM25, E5-base, and hybrid retrieval using exact search.
@@ -33,7 +33,7 @@ Dr. Maya Cohen and Daniel Levi reviewed an experiment comparing lexical, dense, 
   - Prepare ten representative retrieval failures.
   - Deliver the corrected manifest, retrieval table, and failure analysis by Friday afternoon.
 
-- **Dr. Maya Cohen**
+- **Dr. Alice Turner**
   - Prepare a blinded claim-level annotation sheet.
   - Independently annotate 30 generated answers after the corrected retrieval run is complete.
 
@@ -42,7 +42,7 @@ Dr. Maya Cohen and Daniel Levi reviewed an experiment comparing lexical, dense, 
 - Whether BM25 hard negatives improve dense-retriever fine-tuning.
 - Whether a weighted hybrid outperforms fixed reciprocal rank fusion.
 - How retrieval quality changes with different context sizes.
-- Whether multilingual retrieval over Hebrew advisories should become future work.
+- Whether multilingual retrieval over non-English advisories should become future work.
 
 ## Important discussion
 
@@ -66,4 +66,4 @@ Token-level F1 will remain a secondary metric. The primary answer-quality analys
 
 - Revisit hard-negative mining after the corrected baseline is stable.
 - Consider weighted fusion and context-size experiments as ablations.
-- Record Hebrew and multilingual retrieval as a possible thesis extension.
+- Record multilingual retrieval as a possible thesis extension.

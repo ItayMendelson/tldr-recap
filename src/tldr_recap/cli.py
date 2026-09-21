@@ -26,7 +26,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--language",
         default="auto",
-        help="Whisper language code such as en or he (default: auto-detect)",
+        help="Whisper language code such as en or fr (default: auto-detect)",
     )
     parser.add_argument("--model", default="large-v3", help="Whisper model")
     parser.add_argument("--gpu", default="T4", help="Colab GPU type")
