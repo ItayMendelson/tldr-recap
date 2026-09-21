@@ -9,10 +9,8 @@ from .colab import ColabJob, ColabUnavailable, CommandFailed
 from .paths import default_output_dir
 from .speakers import parse_speaker_mappings, rename_speakers
 
-
 NO_TOKEN_MESSAGE = (
-    "No Hugging Face token found. Run `hf auth login` or set HF_TOKEN "
-    "(see the README)."
+    "No Hugging Face token found. Run `hf auth login` or set HF_TOKEN (see the README)."
 )
 
 

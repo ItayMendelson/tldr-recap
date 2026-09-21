@@ -92,7 +92,7 @@ The `HF_TOKEN` environment variable works too. If you always pass `--no-diarizat
 uv run --no-project scripts/install.py
 ```
 
-This installs `recap` as an editable `uv` tool and links the skill into `~/.claude/skills/tldr-recap` (Claude Code) and `~/.agents/skills/tldr-recap` (Codex). The links point at this folder instead of copying it, so keep the checkout in place. If you move it, run the installer again from the new location.
+This installs `recap` as an editable `uv` tool and links the skill into `~/.claude/skills/tldr-recap` (Claude Code) and `~/.agents/skills/tldr-recap` (Codex). A harness is only linked if its directory (`~/.claude`, `~/.agents`) already exists; otherwise the installer skips it and says so. The links point at this folder instead of copying it, so keep the checkout in place. If you move it, run the installer again from the new location.
 
 Check that it worked:
 

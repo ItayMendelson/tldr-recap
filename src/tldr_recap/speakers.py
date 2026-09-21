@@ -15,9 +15,7 @@ def parse_speaker_mappings(values: Iterable[str]) -> dict[str, str]:
         label = label.strip()
         name = name.strip()
         if not separator or not label or not name:
-            raise ValueError(
-                f"Invalid speaker mapping '{value}'. Use LABEL=Name."
-            )
+            raise ValueError(f"Invalid speaker mapping '{value}'. Use LABEL=Name.")
         if label in mappings:
             raise ValueError(f"Duplicate speaker mapping: {label}")
         mappings[label] = name
@@ -66,7 +64,5 @@ def rename_speakers(output_dir: Path, mappings: dict[str, str]) -> Path:
     transcript_path.write_text(
         json.dumps(transcript, ensure_ascii=False, indent=2), encoding="utf-8"
     )
-    write_transcript_markdown(
-        transcript["parts"], output_dir / "transcript.md"
-    )
+    write_transcript_markdown(transcript["parts"], output_dir / "transcript.md")
     return output_dir

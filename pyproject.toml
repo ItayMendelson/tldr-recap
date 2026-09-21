@@ -16,3 +16,8 @@ recap = "tldr_recap.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/tldr_recap"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.16.8",
+]

@@ -67,9 +67,7 @@ class CliTests(unittest.TestCase):
 
             run(["speakers", str(output_dir), "SPEAKER_00=Alice"])
 
-            updated_json = (output_dir / "transcript.json").read_text(
-                encoding="utf-8"
-            )
+            updated_json = (output_dir / "transcript.json").read_text(encoding="utf-8")
             updated_markdown = (output_dir / "transcript.md").read_text(
                 encoding="utf-8"
             )

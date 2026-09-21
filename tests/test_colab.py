@@ -8,10 +8,10 @@ from pathlib import Path
 from unittest.mock import patch
 
 from tldr_recap.colab import (
+    REMOTE_STAGE_STATUS,
     ColabJob,
     ColabUnavailable,
     CommandFailed,
-    REMOTE_STAGE_STATUS,
 )
 
 
@@ -106,9 +106,7 @@ class ColabJobTests(unittest.TestCase):
             self.assertIn("stop", job.commands[-1])
 
     @patch("tldr_recap.colab.shutil.which", return_value="/usr/local/bin/colab")
-    def test_diarization_downloads_transcript_before_second_stage(
-        self, _which
-    ) -> None:
+    def test_diarization_downloads_transcript_before_second_stage(self, _which) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             media = root / "meeting.mp4"
@@ -142,9 +140,7 @@ class ColabJobTests(unittest.TestCase):
             self.assertLess(workers[1], downloads[1])
 
     @patch("tldr_recap.colab.shutil.which", return_value="/usr/local/bin/colab")
-    def test_diarization_failure_preserves_transcript_checkpoint(
-        self, _which
-    ) -> None:
+    def test_diarization_failure_preserves_transcript_checkpoint(self, _which) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             media = root / "meeting.mp4"
@@ -201,9 +197,7 @@ class ColabJobTests(unittest.TestCase):
 
             job.run_diarization()
 
-            install = next(
-                command for command in job.commands if "install" in command
-            )
+            install = next(command for command in job.commands if "install" in command)
             self.assertIn("pyannote.audio>=4,<5", install)
             self.assertNotIn("faster-whisper", install)
             self.assertTrue(

@@ -19,7 +19,7 @@ def default_output_dir(
 ) -> Path:
     """Build a timestamped output directory from the first media filename."""
     first = next(iter(media_paths))
-    timestamp = (now or datetime.now()).strftime("%Y-%m-%d_%H-%M")
+    timestamp = (now or datetime.now().astimezone()).strftime("%Y-%m-%d_%H-%M")
     root = base_dir or Path.cwd() / "meetings"
     candidate = root / f"{timestamp}-{slugify(first.stem)}"
     suffix = 2

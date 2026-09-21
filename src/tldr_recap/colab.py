@@ -10,7 +10,6 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
 
-
 REMOTE_ROOT = "/content/tldr-recap"
 REMOTE_TRANSCRIPT_ARCHIVE = f"{REMOTE_ROOT}/transcription.zip"
 REMOTE_FINAL_ARCHIVE = f"{REMOTE_ROOT}/artifacts.zip"
@@ -29,8 +28,7 @@ def _require_colab() -> None:
     """Fail early when the Colab CLI is not installed."""
     if shutil.which("colab") is None:
         raise ColabUnavailable(
-            "Google Colab CLI was not found. Install it as described in "
-            "the README."
+            "Google Colab CLI was not found. Install it as described in the README."
         )
 
 
@@ -64,9 +62,7 @@ class ColabJob:
             self._progress(f"Transcribing with Whisper {self.model}...")
             self._execute_worker(session, "transcribe")
             transcript_archive = (
-                REMOTE_TRANSCRIPT_ARCHIVE
-                if self.diarize
-                else REMOTE_FINAL_ARCHIVE
+                REMOTE_TRANSCRIPT_ARCHIVE if self.diarize else REMOTE_FINAL_ARCHIVE
             )
             self._progress("Downloading the transcript checkpoint...")
             self._download_artifacts(session, transcript_archive)
@@ -85,9 +81,7 @@ class ColabJob:
         _require_colab()
         transcript_path = self.output_dir / "transcript.json"
         if not transcript_path.is_file():
-            raise ValueError(
-                f"Transcript checkpoint not found: {transcript_path}"
-            )
+            raise ValueError(f"Transcript checkpoint not found: {transcript_path}")
         transcript = json.loads(transcript_path.read_text(encoding="utf-8"))
         self.model = str(transcript["model"])
         self.language = str(transcript["requested_language"])
@@ -146,9 +140,7 @@ class ColabJob:
             for index, path in enumerate(self.media, start=1):
                 remote_name = f"{index:03d}-{path.name}"
                 remote_path = f"{REMOTE_ROOT}/input/{remote_name}"
-                self._run(
-                    ["colab", "upload", "-s", session, str(path), remote_path]
-                )
+                self._run(["colab", "upload", "-s", session, str(path), remote_path])
                 inputs.append({"name": path.name, "path": remote_path})
 
             if self.hf_token:
@@ -220,9 +212,7 @@ class ColabJob:
             "from pathlib import Path; "
             f"Path('{REMOTE_STAGE_STATUS}').unlink(missing_ok=True)"
         )
-        self._run(
-            ["colab", "exec", "-s", session], input_text=clear_status
-        )
+        self._run(["colab", "exec", "-s", session], input_text=clear_status)
         self._run(
             [
                 "colab",
@@ -254,9 +244,7 @@ class ColabJob:
             try:
                 status = json.loads(status_path.read_text(encoding="utf-8"))
             except json.JSONDecodeError as error:
-                raise CommandFailed(
-                    f"{stage} stage returned invalid status"
-                ) from error
+                raise CommandFailed(f"{stage} stage returned invalid status") from error
         if status.get("stage") != stage:
             raise CommandFailed(
                 f"Expected {stage} status, received {status.get('stage')}"

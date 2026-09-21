@@ -1,6 +1,5 @@
 """Tests for transcript speaker alignment and formatting."""
 
-import json
 import os
 import sys
 import tempfile
@@ -82,8 +81,13 @@ class RemoteTranscribeTests(unittest.TestCase):
                 "name": name,
                 "path": f"/content/{name}",
                 "segments": [
-                    {"start": 0.0, "end": 1.0, "text": "hi", "speaker": None,
-                     "words": [dict(word)]}
+                    {
+                        "start": 0.0,
+                        "end": 1.0,
+                        "text": "hi",
+                        "speaker": None,
+                        "words": [dict(word)],
+                    }
                 ],
             }
 
@@ -201,9 +205,7 @@ class RemoteTranscribeTests(unittest.TestCase):
             }
             write_artifacts([part], config, diarization=False)
             loaded = load_transcribed_parts(config)
-            self.assertEqual(
-                loaded[0]["path"], "/content/new-session/meeting.mp4"
-            )
+            self.assertEqual(loaded[0]["path"], "/content/new-session/meeting.mp4")
 
     def test_whisper_download_uses_hugging_face_token(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -222,17 +224,16 @@ class RemoteTranscribeTests(unittest.TestCase):
                 "inputs": [],
                 "hf_token_path": str(token_path),
             }
-            with patch.dict(sys.modules, {"faster_whisper": fake_module}), patch.dict(
-                os.environ, {}, clear=True
+            with (
+                patch.dict(sys.modules, {"faster_whisper": fake_module}),
+                patch.dict(os.environ, {}, clear=True),
             ):
                 transcribe_inputs(config)
 
             self.assertEqual(observed["token"], "secret-token")
 
     def test_transcribe_accepts_any_detected_language(self) -> None:
-        info = SimpleNamespace(
-            language="fr", duration=1.0, language_probability=0.9
-        )
+        info = SimpleNamespace(language="fr", duration=1.0, language_probability=0.9)
 
         class FakeWhisperModel:
             def __init__(self, *args, **kwargs):

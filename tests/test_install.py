@@ -1,10 +1,11 @@
 """Tests for portable skill installation."""
 
+import contextlib
 import importlib.util
+import io
 import tempfile
 import unittest
 from pathlib import Path
-
 
 INSTALL_PATH = Path(__file__).parents[1] / "scripts" / "install.py"
 SPEC = importlib.util.spec_from_file_location("tldr_recap_install", INSTALL_PATH)
@@ -68,6 +69,30 @@ class InstallTests(unittest.TestCase):
             INSTALL.link_skill(source, target)
             INSTALL.link_skill(source, target)
             self.assertEqual(target.resolve(), source.resolve())
+
+    def test_link_harnesses_skips_missing_harness(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            home = Path(temporary) / "home"
+            (home / ".claude").mkdir(parents=True)
+            source = Path(temporary) / "source"
+            source.mkdir()
+            with contextlib.redirect_stdout(io.StringIO()) as output:
+                INSTALL.link_harnesses(source, home)
+            link = home / ".claude" / "skills" / "tldr-recap"
+            self.assertEqual(link.resolve(), source.resolve())
+            self.assertFalse((home / ".agents").exists())
+            self.assertIn("Skipped Codex", output.getvalue())
+
+    def test_link_harnesses_reports_when_none_found(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            home = Path(temporary) / "home"
+            home.mkdir()
+            source = Path(temporary) / "source"
+            source.mkdir()
+            with contextlib.redirect_stdout(io.StringIO()) as output:
+                INSTALL.link_harnesses(source, home)
+            self.assertEqual(list(home.iterdir()), [])
+            self.assertIn("No fitting harness found", output.getvalue())
 
 
 if __name__ == "__main__":

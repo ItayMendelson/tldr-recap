@@ -2,7 +2,7 @@
 
 import tempfile
 import unittest
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 from tldr_recap.paths import default_output_dir, slugify
@@ -15,7 +15,7 @@ class PathTests(unittest.TestCase):
     def test_default_output_dir_avoids_collision(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            now = datetime(2026, 9, 20, 16, 30)
+            now = datetime(2026, 9, 20, 16, 30, tzinfo=UTC)
             first = default_output_dir([Path("Meeting.mp4")], root, now)
             first.mkdir()
             second = default_output_dir([Path("Meeting.mp4")], root, now)

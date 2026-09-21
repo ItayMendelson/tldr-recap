@@ -11,10 +11,9 @@ import os
 import shutil
 from collections import Counter
 from collections.abc import Iterable
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
-
 
 CONFIG_PATH = Path("/content/tldr-recap/job.json")
 STATUS_PATH = Path("/content/tldr-recap/stage-status.json")
@@ -88,9 +87,7 @@ def transcribe_inputs(config: dict[str, Any]) -> list[dict[str, Any]]:
     return parts
 
 
-def diarize_inputs(
-    parts: list[dict[str, Any]], config: dict[str, Any]
-) -> None:
+def diarize_inputs(parts: list[dict[str, Any]], config: dict[str, Any]) -> None:
     """Attach pyannote speaker labels to words and segments."""
     print("Loading speaker diarization libraries...", flush=True)
     import torch
@@ -114,16 +111,12 @@ def diarize_inputs(
         output = pipeline(part["path"], **options)
         annotation = output.exclusive_speaker_diarization
         prefix = f"PART{number}_" if len(parts) > 1 else ""
-        intervals = _speaker_intervals(
-            annotation.itertracks(yield_label=True), prefix
-        )
+        intervals = _speaker_intervals(annotation.itertracks(yield_label=True), prefix)
         _assign_speakers(part["segments"], intervals)
         print(f"Speaker labels complete for {part['name']}.", flush=True)
 
 
-def _speaker_intervals(
-    tracks: Iterable[Any], prefix: str = ""
-) -> list[dict[str, Any]]:
+def _speaker_intervals(tracks: Iterable[Any], prefix: str = "") -> list[dict[str, Any]]:
     """Normalize pyannote tracks into anonymous labels for one recording.
 
     Speakers are identified separately in each recording, so labels are only
@@ -221,9 +214,7 @@ def _timestamp(seconds: float) -> str:
     return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
 
 
-def write_transcript_markdown(
-    parts: list[dict[str, Any]], output_path: Path
-) -> None:
+def write_transcript_markdown(parts: list[dict[str, Any]], output_path: Path) -> None:
     """Write a readable transcript from structured transcript parts."""
     markdown = ["# Meeting transcript", ""]
     for part in parts:
@@ -243,9 +234,7 @@ def write_transcript_markdown(
                     "",
                 ]
             )
-    output_path.write_text(
-        "\n".join(markdown).rstrip() + "\n", encoding="utf-8"
-    )
+    output_path.write_text("\n".join(markdown).rstrip() + "\n", encoding="utf-8")
 
 
 def write_artifacts(
@@ -270,7 +259,7 @@ def write_artifacts(
     write_transcript_markdown(parts, output_dir / "transcript.md")
 
     metadata = {
-        "created_at": datetime.now(timezone.utc).isoformat(),
+        "created_at": datetime.now(UTC).isoformat(),
         "model": config["model"],
         "device": "cuda",
         "requested_language": config["language"],
@@ -301,17 +290,13 @@ def load_transcribed_parts(config: dict[str, Any]) -> list[dict[str, Any]]:
     parts = transcript["parts"]
     inputs = config["inputs"]
     if len(parts) != len(inputs):
-        raise ValueError(
-            "Transcript part count does not match the supplied recordings"
-        )
+        raise ValueError("Transcript part count does not match the supplied recordings")
     for part, item in zip(parts, inputs):
         part["path"] = item["path"]
     return parts
 
 
-def write_stage_status(
-    stage: str, status: str, error: Exception | None = None
-) -> None:
+def write_stage_status(stage: str, status: str, error: Exception | None = None) -> None:
     """Write a machine-readable result for the local orchestrator."""
     result = {"stage": stage, "status": status}
     if error is not None:
