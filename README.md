@@ -61,7 +61,7 @@ I built a corpus from approximately twelve thousand cybersecurity advisories pub
 
 You need:
 
-- macOS or Linux
+- macOS, Linux, or Windows through [WSL2](#windows)
 - [`uv`](https://docs.astral.sh/uv/)
 - A Google account that can start a Colab GPU runtime
 - A Hugging Face account, for speaker labels
@@ -99,6 +99,16 @@ Check that it worked:
 ```bash
 recap --help
 ```
+
+### Windows
+
+Native Windows is not supported. Google's Colab CLI supports only Linux and macOS, and it currently crashes on startup under Windows ([google-colab-cli#78](https://github.com/googlecolab/google-colab-cli/issues/78)). Use [WSL2](https://learn.microsoft.com/windows/wsl/install) and follow the steps above inside your WSL distribution:
+
+- Run your agent (Claude Code or Codex) from the WSL shell, not from PowerShell, so the agent, `recap` and `colab` share one environment.
+- Install the skill from inside WSL. It links into the WSL home directory (`~/.claude`, `~/.agents`), not `%USERPROFILE%`.
+- Recordings on the Windows drive are under `/mnt/c`, for example `recap "/mnt/c/Users/you/Videos/research sync.mp4"`.
+
+Native Windows support will be revisited once the Colab CLI ships a Windows release.
 
 ## How it works
 

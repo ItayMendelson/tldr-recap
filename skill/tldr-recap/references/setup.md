@@ -12,4 +12,6 @@ Install the Colab CLI with the pinned command in step 1 of `README.md` in that f
 
 Run `colab sessions` in an interactive terminal and complete Google's one-time authorization flow before the first meeting. GPU allocation depends on the user's current Colab quota and may fail when no free accelerator is available.
 
+On Windows, only WSL2 is supported, because the Colab CLI does not run natively on Windows. Run `recap` and the agent from the WSL shell, and refer to recordings on the Windows drive as `/mnt/c/...` paths. If the agent is running natively on Windows and `colab` fails at startup, tell the user to switch to WSL2 instead of trying to work around it.
+
 Speaker diarization uses `pyannote/speaker-diarization-community-1`. The user must accept that model's conditions on Hugging Face, then authenticate with `hf auth login`. If the CLI is not installed, run `uvx --from huggingface_hub hf auth login`. TLDR Recap automatically reads Hugging Face's standard token cache, including `HF_TOKEN_PATH` and `HF_HOME`. The `HF_TOKEN` environment variable also works. The token is uploaded only to the temporary Colab runtime, and only when speaker labels are requested. The remote token file is deleted after the model loads. Use `--no-diarization` when speaker labels are not needed.
